@@ -7,18 +7,17 @@ const filterUncompletedButton = document.getElementById("filterUncompleted");
 const filterCompletedButton = document.getElementById("filterCompleted");
 
 let todoItems = [];
+let filteredItems = [...todoItems];
 
 //------------------------------------------------ Events
 
 btnSubmit.addEventListener("click", () => {
   addTodo(todoInput.value);
-  countItems();
 });
 
 todoInput.addEventListener("keypress", (event) => {
   if (event.key == "Enter") {
     addTodo(todoInput.value);
-    countItems();
   }
 });
 
@@ -28,6 +27,10 @@ filterCompletedButton.addEventListener("click", () => {
 
 filterUncompletedButton.addEventListener("click", () => {
   filterUncompleted();
+});
+
+filterAllButton.addEventListener("click", () => {
+  getAll();
 });
 
 //------------------------------------------------ Services
@@ -45,12 +48,13 @@ function addTodo(todoName) {
 
   todoItems.push(data);
 
-  load();
+  countItems(todoItems);
+  load(todoItems);
 }
 
-function load() {
+function load(data) {
   listContainer.innerHTML = "";
-  todoItems.forEach((val) => {
+  data.forEach((val) => {
     console.log(val);
 
     //---------------------------------------------- TO DO li
@@ -102,7 +106,7 @@ function completeTask(button, value) {
     if (value.completed) {
       const name = value.todoName;
       value.todoName = `<del>${name}</del>`;
-      load();
+      load(todoItems);
     }
   });
 }
@@ -112,7 +116,7 @@ function editTask(button, value) {
     const editedName = prompt("Input New Todo Name: ");
     value.todoName = editedName;
     value.completed = false;
-    load();
+    load(todoItems);
   });
 }
 
@@ -124,13 +128,13 @@ function deleteTask(button, value) {
       todoItems.splice(index, 1);
     }
 
-    countItems();
-    load();
+    countItems(todoItems);
+    load(todoItems);
   });
 }
 
-function countItems() {
-  const count = todoItems.length;
+function countItems(data) {
+  const count = data.length;
 
   let totalItems = document.querySelector("#totalItems");
 
@@ -160,10 +164,10 @@ function filterCompleted() {
   }
   console.log(todoItems);
 
-  todoItems = todoItems.filter((item) => item.completed === true);
+  filteredItems = todoItems.filter((item) => item.completed === true);
 
-  countItems();
-  load();
+  countItems(filteredItems);
+  load(filteredItems);
 }
 
 function filterUncompleted() {
@@ -173,10 +177,21 @@ function filterUncompleted() {
   }
   console.log(todoItems);
 
-  todoItems = todoItems.filter((item) => item.completed === false);
+  filteredItems = todoItems.filter((item) => item.completed === false);
 
-  countItems();
-  load();
+  countItems(filteredItems);
+  load(filteredItems);
+}
+
+function getAll() {
+  if (todoItems === null) {
+    alert("No Todo Task");
+    return;
+  }
+  console.log(todoItems);
+
+  countItems(filteredItems);
+  load(todoItems);
 }
 
 //------------------------------------------------ Utils
