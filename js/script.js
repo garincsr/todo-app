@@ -2,8 +2,11 @@ const todoInput = document.getElementById("todoInput");
 const btnSubmit = document.getElementById("btnSubmit");
 const listContainer = document.querySelector(".list-group");
 const totalItemsContainer = document.querySelector(".totalItemsContainer");
+const filterAllButton = document.getElementById("filterAll");
+const filterUncompletedButton = document.getElementById("filterUncompleted");
+const filterCompletedButton = document.getElementById("filterCompleted");
 
-const todoItems = [];
+let todoItems = [];
 
 //------------------------------------------------ Events
 
@@ -19,10 +22,16 @@ todoInput.addEventListener("keypress", (event) => {
   }
 });
 
+filterCompletedButton.addEventListener("click", () => {
+  filterCompleted();
+});
+
+filterUncompletedButton.addEventListener("click", () => {
+  filterUncompleted();
+});
+
 //------------------------------------------------ Services
 function addTodo(todoName) {
-  console.log("PANJANG KATA", todoName.length);
-
   if (todoName.length < 4 || todoName.length == 25) {
     alert("Todo name minimal character is 4 and maximal character is 25");
     return;
@@ -31,7 +40,7 @@ function addTodo(todoName) {
   let data = {
     id: todoItems.length + 1,
     todoName: todoName,
-    completed: "false",
+    completed: false,
   };
 
   todoItems.push(data);
@@ -64,6 +73,7 @@ function load() {
 
     completeTask(completeBtn, val);
     editTask(editBtn, val);
+    deleteTask(deleteBtn, val);
 
     //----------------------------------------------- Pasangkan button dan icon
     //--------------- completed
@@ -88,7 +98,7 @@ function load() {
 
 function completeTask(button, value) {
   button.addEventListener("click", () => {
-    value.completed = "true";
+    value.completed = true;
     if (value.completed) {
       const name = value.todoName;
       value.todoName = `<del>${name}</del>`;
@@ -101,7 +111,20 @@ function editTask(button, value) {
   button.addEventListener("click", () => {
     const editedName = prompt("Input New Todo Name: ");
     value.todoName = editedName;
+    value.completed = false;
+    load();
+  });
+}
 
+function deleteTask(button, value) {
+  button.addEventListener("click", () => {
+    const index = todoItems.findIndex((item) => item.id === value.id);
+
+    if (index !== -1) {
+      todoItems.splice(index, 1);
+    }
+
+    countItems();
     load();
   });
 }
@@ -128,6 +151,32 @@ function countItems() {
   } else {
     document.querySelector("#spanItems").innerText = count;
   }
+}
+
+function filterCompleted() {
+  if (todoItems === null) {
+    alert("No Todo Task");
+    return;
+  }
+  console.log(todoItems);
+
+  todoItems = todoItems.filter((item) => item.completed === true);
+
+  countItems();
+  load();
+}
+
+function filterUncompleted() {
+  if (todoItems === null) {
+    alert("No Todo Task");
+    return;
+  }
+  console.log(todoItems);
+
+  todoItems = todoItems.filter((item) => item.completed === false);
+
+  countItems();
+  load();
 }
 
 //------------------------------------------------ Utils
