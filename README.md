@@ -21,11 +21,11 @@ This is a simple Todo List application built using pure JavaScript (Vanilla JS) 
 
 ## 📌 How to Use
 
-1️⃣ Clone this repository:
+- 1️⃣ Clone this repository:
 
 ```sh
 git clone https://github.com/garincsr/todo-app.git
 ```
 
-2️⃣ Open `index.html` in your browser.
-3️⃣ Add new tasks, edit, complete, or delete them as needed.
+- 2️⃣ Open `index.html` in your browser.
+- 3️⃣ Add new tasks, edit, complete, or delete them as needed.
