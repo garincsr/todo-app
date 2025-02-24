@@ -8,14 +8,12 @@ const todoItems = [];
 //------------------------------------------------ Events
 
 btnSubmit.addEventListener("click", () => {
-  listContainer.innerHTML = "";
   addTodo(todoInput.value);
   countItems();
 });
 
 todoInput.addEventListener("keypress", (event) => {
   if (event.key == "Enter") {
-    listContainer.innerHTML = "";
     addTodo(todoInput.value);
     countItems();
   }
@@ -42,6 +40,7 @@ function addTodo(todoName) {
 }
 
 function load() {
+  listContainer.innerHTML = "";
   todoItems.forEach((val) => {
     console.log(val);
 
@@ -63,30 +62,8 @@ function load() {
     const editIcon = createIcon("bi-pencil");
     const deleteIcon = createIcon("bi-journal-x");
 
-    completeBtn.addEventListener("click", () => {
-      val.completed = "true";
-      if (val.completed) {
-        const name = val.todoName;
-        val.todoName = `<del>${name}</del>`;
-
-        editBtn.appendChild(editIcon);
-        deleteBtn.appendChild(deleteIcon);
-
-        divBtnContainer.removeChild(completeBtn);
-        divBtnContainer.appendChild(editBtn);
-        divBtnContainer.appendChild(deleteBtn);
-
-        li.innerHTML = val.todoName;
-        li.appendChild(divBtnContainer);
-        listContainer.appendChild(li);
-      }
-    });
-
-    editBtn.addEventListener("click", () => {
-      const editedName = prompt("Input New Todo Name: ");
-      li.innerHTML = editedName;
-      listContainer.appendChild(li);
-    });
+    completeTask(completeBtn, val);
+    editTask(editBtn, val);
 
     //----------------------------------------------- Pasangkan button dan icon
     //--------------- completed
@@ -107,6 +84,26 @@ function load() {
   });
 
   todoInput.value = null;
+}
+
+function completeTask(button, value) {
+  button.addEventListener("click", () => {
+    value.completed = "true";
+    if (value.completed) {
+      const name = value.todoName;
+      value.todoName = `<del>${name}</del>`;
+      load();
+    }
+  });
+}
+
+function editTask(button, value) {
+  button.addEventListener("click", () => {
+    const editedName = prompt("Input New Todo Name: ");
+    value.todoName = editedName;
+
+    load();
+  });
 }
 
 function countItems() {
